@@ -1,12 +1,12 @@
 @extends('admin._layouts.default')
 
-@section('title', ' - login')
+@section('title', 'Log in')
 @section('bodyclass', 'hold-transition login-page')
 
 @section('content')
 <div class="login-box">
   <div class="login-logo">
-    <a href="{{ '//' . SITE_URL }}/"><b></b>Admin</a>
+    <a href="{{ '//' . SITE_URL }}/"><b>Admin</b>LTE</a>
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
@@ -51,4 +51,5 @@ function recaptcha(){
       $('#login_captcha_img').attr('src',data.captcha);
   },'json');
 }
+</script>
 @endsection

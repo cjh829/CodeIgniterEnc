@@ -20,3 +20,13 @@ if (!function_exists('str_ends_with')) {
         return substr($haystack, -strlen($needle)) === $needle;
     }
 }
+
+if (!function_exists('str_cut_tail')) {
+    function str_cut_tail($haystack, $needle)
+    {
+        if (str_ends_with($haystack, $needle)) {
+            return substr($haystack, 0, strlen($haystack) - strlen($needle));
+        }
+        return $haystack;
+    }
+}

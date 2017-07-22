@@ -1,7 +1,9 @@
-<?php
-defined('BASEPATH') OR exit('No direct script access allowed');
-?><?php require APPPATH . 'views/parts/header.php'; ?>
-<body class="hold-transition skin-blue sidebar-mini">
+@extends('admin._layouts.default')
+
+@section('title', 'Dashboard')
+@section('bodyclass', 'hold-transition skin-blue sidebar-mini')
+
+@section('content')
 <div class="wrapper">
 
   <header class="main-header">
@@ -9,9 +11,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- Logo -->
     <a href="index2.html" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>JJ</b></span>
+      <span class="logo-mini"><b>A</b>LT</span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>JJ</b>ADMIN</span>
+      <span class="logo-lg"><b>Admin</b>LTE</span>
     </a>
 
     <!-- Header Navbar: style can be found in header.less -->
@@ -257,7 +259,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   <a href="#" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
-                  <a href="home/logout" class="btn btn-default btn-flat">Sign out</a>
+                  <a href="/admin/home/logout" class="btn btn-default btn-flat">Sign out</a>
                 </div>
               </li>
             </ul>
@@ -1515,5 +1517,4 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 </div>
 <!-- ./wrapper -->
-
-<?php require APPPATH . 'views/parts/footer.php'; ?>
+@endsection

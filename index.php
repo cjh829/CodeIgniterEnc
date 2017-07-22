@@ -178,7 +178,7 @@ switch (ENVIRONMENT)
  */
 	// $assign_to_config['name_of_config_item'] = 'value of config item';
 
-
+define('SITE_URL', $_SERVER['HTTP_HOST']);
 
 // --------------------------------------------------------------------
 // END OF USER CONFIGURABLE SETTINGS.  DO NOT EDIT BELOW THIS LINE

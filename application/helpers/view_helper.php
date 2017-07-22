@@ -15,3 +15,18 @@ if (!function_exists('view')) {
         echo $CI->blade->view()->make($name, $data, $mergeData)->render();
     }
 }
+
+if (!function_exists('jsonview')) {
+    function jsonview($data = [], $status = NULL, $msg = '') {
+        if (empty($status) && array_key_exists('status',$data)){
+            $result = $data;
+        } else {
+            $result = ['status'=>$status,'data'=>$data];
+            if (!empty($msg)){
+                $result['msg'] = $msg;
+            }
+        }
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode($data);
+    }
+}

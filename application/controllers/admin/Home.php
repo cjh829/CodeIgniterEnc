@@ -4,27 +4,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Home extends MY_Controller {
 
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see https://codeigniter.com/user_guide/general/urls.html
-	 */
 	public function index()
 	{
-		if (!isset($this->session->user)) {
-			smart_redirect('login');
-		}
-
 		return view('index');
 	}
 
@@ -42,7 +23,7 @@ class Home extends MY_Controller {
 	}
 
 	public function recaptcha(){
-		echo json_encode(array('captcha'=>$this->_my_login_captcha()));
+		return jsonview( ['captcha'=>$this->_my_login_captcha()] );
 	}
 
 	protected function _my_login_captcha(){
@@ -81,17 +62,18 @@ class Home extends MY_Controller {
 		$hash = $this->adminuser->getPasswordHash($userid);
 		$ok = password_verify($passwd,$hash);
 		if (!$ok){
-			$this->session->set_flashdata('errormsg','用戶名或密碼錯誤');
-			redirect('//'.base_url('admin/home/login'));
+			$this->session->set_flashdata('errormsg','incorrect user or password!');
+			smart_redirect('login');
 		}
 
 		if (trim($captcha) !== $this->session->login_captcha){
-			$this->session->set_flashdata('errormsg','驗證碼不對！');
-			redirect('//'.base_url('admin/home/login'));
+			$this->session->set_flashdata('errormsg','incorrect captcha!');
+			smart_redirect('login');
 		}
 
 		$this->session->user = $userid;
-		redirect('//'.base_url('admin/home'));
+		$this->session->acls = $this->adminuser->getACLs($userid);
+		smart_redirect('index');
 	}
 
 	public function logout() {
@@ -102,13 +84,5 @@ class Home extends MY_Controller {
 	}
 
 	public function test() {
-		echo smart_path();
-		echo "<br/>\n";
-		echo smart_path('test');
-		echo "<br/>\n";
-		echo smart_path('admin/home/index');
-		echo "<br/>\n";
-		//echo smart_redirect('admin/home/index');
-		echo "<br/>\n";
 	}
 }
