@@ -20,6 +20,12 @@ class Home extends MY_Controller {
 	 */
 	public function index()
 	{
+		echo smart_path();
+		echo "\n";
+		echo smart_path('test');
+		echo "\n";
+		echo smart_path('admin/home/index');
+		echo "\n";
 		echo "ok";
 	}
 }

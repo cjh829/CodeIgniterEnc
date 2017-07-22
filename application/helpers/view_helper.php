@@ -5,6 +5,7 @@ use Philo\Blade\Blade;
 
 if (!function_exists('view')) {
     function view($name = NULL, $data = [], $mergeData = []) {
+        $name = smart_path($name);
         $CI =& get_instance();
         if (!isset($CI->blade)) {
             $views = APPPATH . '/views';

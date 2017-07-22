@@ -22,23 +22,23 @@ class Home extends MY_Controller {
 	public function index()
 	{
 		if (!isset($this->session->user)) {
-			redirect('//'.base_url('admin/home/login'));
+			smart_redirect('login');
 		}
 
-		$this->load->view('admin/home/index');
+		return view('index');
 	}
 
 	public function login() {
 
 		if (isset($this->session->user)) {
-			redirect('//'.base_url('admin/home/index'));
+			smart_redirect('index');
 		}
 
 		$data['errormsg'] = $this->session->flashdata('errormsg');
 
 		$data['captcha_img'] = $this->_my_login_captcha();
 
-		$this->load->view('admin/home/login',$data);
+		return view('login',$data);
 	}
 
 	public function recaptcha(){
@@ -48,9 +48,9 @@ class Home extends MY_Controller {
 	protected function _my_login_captcha(){
 		$this->load->helper('captcha');
 		$vals = array(
-			'img_path'  => APPPATH.'/static/captcha/',
-			'img_url'   => '//'.base_url('captcha'),
-			'font_path' => APPPATH.'/static/captcha/calibrib.ttf',
+			'img_path'  => APPPATH.'/public/captcha/',
+			'img_url'   => '//'.SITE_URL.'/captcha',
+			'font_path' => APPPATH.'/public/captcha/calibrib.ttf',
 			'img_width' => 200,
 			'img_height'    => 50,
 			'expiration'    => 180,
@@ -69,7 +69,7 @@ class Home extends MY_Controller {
 
 		$cap = create_captcha($vals);
 		$this->session->login_captcha = $cap['word']; 
-		return '//'.base_url('captcha').'/'.$cap['filename'];
+		return '//'.SITE_URL.'/captcha/'.$cap['filename'];
 	}
 
 	public function login_submit() {
@@ -98,10 +98,17 @@ class Home extends MY_Controller {
 		if (isset($this->session->user)) {
 			$this->session->sess_destroy();
 		}
-		redirect('//'.base_url('admin/home/login'));
+		smart_redirect('login');
 	}
 
-	public function test(){
-		return view('admin/home/test');
+	public function test() {
+		echo smart_path();
+		echo "<br/>\n";
+		echo smart_path('test');
+		echo "<br/>\n";
+		echo smart_path('admin/home/index');
+		echo "<br/>\n";
+		//echo smart_redirect('admin/home/index');
+		echo "<br/>\n";
 	}
 }

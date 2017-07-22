@@ -1,38 +1,39 @@
-<?php
-defined('BASEPATH') OR exit('No direct script access allowed');
-?>
-<?php require APPPATH . 'views/parts/header.php'; ?>
-<body class="hold-transition login-page">
+@extends('admin._layouts.default')
+
+@section('title', ' - login')
+@section('bodyclass', 'hold-transition login-page')
+
+@section('content')
 <div class="login-box">
   <div class="login-logo">
-    <a href="<?php echo '//' . SITE_URL; ?>/"><b>JJ</b>Admin</a>
+    <a href="{{ '//' . SITE_URL }}/"><b></b>Admin</a>
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
-    <p class="login-box-msg text-danger"><?php echo $errormsg; ?></p>
+    <p class="login-box-msg text-danger">{{ $errormsg }}</p>
 
-    <form action="<?php echo '//' . SITE_URL; ?>/admin/home/login_submit" method="post">
+    <form action="{{ '//' . SITE_URL }}/admin/home/login_submit" method="post">
       <div class="form-group has-feedback">
-        <input type="userid" name="userid" class="form-control" placeholder="用戶名">
+        <input type="text" name="userid" class="form-control" placeholder="User">
         <span class="glyphicon glyphicon-user form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
-        <input type="password" name="password" class="form-control" placeholder="密碼">
+        <input type="password" name="password" class="form-control" placeholder="Password">
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
-        <input type="captcha" name="captcha" class="form-control" placeholder="驗證碼">
+        <input type="text" name="captcha" class="form-control" placeholder="captcha">
         <span class="glyphicon glyphicon-eye-open form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
         <a href="javascript:void(0);" onclick="recaptcha()">
-          <img id="login_captcha_img" src="<?php echo $captcha_img; ?>" style="width: 200; height: 50; border: 0;"/>
+          <img id="login_captcha_img" src="{{ $captcha_img }}" style="width: 200; height: 50; border: 0;"/>
         </a>
       </div>
       <div class="row">
         <!-- /.col -->
         <div class="col-xs-4">
-          <button type="submit" class="btn btn-primary btn-block">登錄</button>
+          <button type="submit" class="btn btn-primary btn-block">Login</button>
         </div>
         <!-- /.col -->
       </div>
@@ -42,11 +43,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <!-- /.login-box-body -->
 </div>
 <!-- /.login-box -->
+@endsection
+@section('scripts')
 <script type="text/javascript">
 function recaptcha(){
   $.get('/admin/home/recaptcha',function(data) {
       $('#login_captcha_img').attr('src',data.captcha);
   },'json');
 }
-</script>
-<?php require APPPATH . 'views/parts/footer.php'; ?>
+@endsection
