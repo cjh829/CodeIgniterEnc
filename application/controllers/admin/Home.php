@@ -100,4 +100,8 @@ class Home extends MY_Controller {
 		}
 		redirect('//'.base_url('admin/home/login'));
 	}
+
+	public function test(){
+		return view('admin/home/test');
+	}
 }

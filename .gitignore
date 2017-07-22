@@ -34,3 +34,4 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 /contributing.md
 /readme.rst
 /license.txt
+application/views_cached/*
