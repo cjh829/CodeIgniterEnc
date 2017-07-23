@@ -9,6 +9,16 @@ class Adminuser_Model extends CI_Model {
         $this->load->database();
     }
 
+    public function getPagedData($page=1, $perpage = 20){
+        $query = $this->db
+                        ->from('adm_user au')
+                        ->join('adm_group ag','au.group_id = ag.id','left')
+                        ->select('au.*,ag.name group_name')
+                        ->paginate('',$page,$perpage);
+        $data = get_paginate_data($query);
+        return $data;
+    }
+
     public function getPasswordHash($userid) {
         $r = $this->db->where('id',$userid)
                 ->select('password')
@@ -33,11 +43,58 @@ class Adminuser_Model extends CI_Model {
             AND ag.is_enabled = 1 
             AND aga.is_enabled = 1
             ) bb ON aa.id = bb.acl_id
-            WHERE aa.is_enabled = 1
+            WHERE aa.is_enabled = 1 
+            AND LENGTH(aa.controller)>0
         ";
-        return $this->db
+        $datas = $this->db
                     ->query($sql,array($userid))
                     ->result_array();
+
+        $acls = array();
+        foreach($datas as $row) {
+            $acls[] = $row['controller'] .'|'. $row['method'];
+        }
+        return $acls;
+    }
+
+    public function getMenus($userid) {
+
+        $sql = "
+            SELECT aa.*, ap.name AS parent_name
+            , CASE aa.parent_id WHEN 0 THEN aa.sort ELSE CONCAT(ap.sort,',',aa.sort) END tree
+            FROM adm_acl aa
+            LEFT JOIN adm_acl ap ON aa.parent_id = ap.id
+            JOIN 
+            (
+            SELECT aga.group_id, aga.acl_id
+            FROM adm_group_acl aga
+            JOIN adm_group ag ON aga.group_id = ag.id
+            JOIN adm_user au ON ag.id = au.group_id
+            WHERE au.id = ? 
+            AND ag.is_enabled = 1 
+            AND aga.is_enabled = 1
+            ) bb ON aa.id = bb.acl_id
+            WHERE aa.is_enabled = 1 
+            AND aa.is_menu = 1
+            ORDER BY tree
+        ";
+        $datas = $this->db
+                    ->query($sql,array($userid))
+                    ->result_array();
+
+        //transform to tree(only two-level)
+        $menutree = array();
+        //transform to map(for determine current menu)
+        $ACLmenuMap = array();
+        foreach($datas as $row) {
+            if ($row['parent_id'] == 0) {
+                $menutree[$row['id']] = array('me'=>$row, 'childs'=>array());
+            } else {
+                $menutree[$row['parent_id']]['childs'][$row['id']] = array('me'=>$row);
+                $ACLmenuMap[strtolower($row['controller'].'|'.$row['method'])] = $row;
+            }
+        }
+        return array('tree'=>$menutree, 'ACLmap'=>$ACLmenuMap);
     }
 
 }

@@ -1,4 +1,4 @@
-@extends('admin._layouts.default')
+@extends('admin._layouts.blank')
 
 @section('title', 'Log in')
 @section('bodyclass', 'hold-transition login-page')
