@@ -333,7 +333,7 @@
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">ACL MENU</li>
         @foreach ($_menus as $row)
-        <li class="treeview{{ (!empty($_current_menu) && $_current_menu['parent_id'] == $row['me']['id']) ? ' active' : '' }}">
+        <li class="treeview{{ (!empty($_current_menu) && $_current_menu['menu_parent_id'] == $row['me']['id']) ? ' active' : '' }}">
           <a href="javscript:void(0);">
             <i class="fa fa-dashboard"></i> <span>{{ $row['me']['name'] }}</span>
             <span class="pull-right-container">
@@ -342,7 +342,7 @@
           </a>
           <ul class="treeview-menu">
           @foreach ($row['childs'] as $child)
-            <li {!! (!empty($_current_menu) && $_current_menu['id'] == $child['me']['id']) ? 'class="active"' : '' !!}>
+            <li {!! (!empty($_current_menu) && $_current_menu['menu_id'] == $child['me']['id']) ? 'class="active"' : '' !!}>
               <a href="{{ '//'.SITE_URL .'/admin/' . $child['me']['controller'] .'/'. $child['me']['method'] }}">
                 <i class="fa fa-circle-o"></i> {{ $child['me']['name'] }}
               </a>
@@ -353,7 +353,7 @@
         @endforeach
 
         <li class="header">MAIN NAVIGATION</li>
-        <li class="active treeview menu-open">
+        <li class="treeview">
           <a href="#">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
             <span class="pull-right-container">
@@ -362,7 +362,7 @@
           </a>
           <ul class="treeview-menu">
             <li><a href="index.html"><i class="fa fa-circle-o"></i> Dashboard v1</a></li>
-            <li class="active"><a href="index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
+            <li><a href="index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
           </ul>
         </li>
         <li class="treeview">

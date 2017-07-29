@@ -46,16 +46,25 @@ if (!function_exists('jsonview')) {
 
 if (!function_exists('get_paginate_data')) {
     function get_paginate_data($dbquery) {
-        $data['lists'] = $dbquery->result_array();
-        $data['paginate_info'] = $dbquery->paginateInfo;
+        $data['data'] = $dbquery->result_array();
 
         $base_url = '//' . SITE_URL . '/' . smart_path();
 
-        $data['paginate_info']['base_page_url'] = $base_url .'/';
-        $data['paginate_info']['first_page_url'] =  $base_url .'/1';
-        $data['paginate_info']['last_page_url'] =  $base_url .'/'. $data['paginate_info']['last_page'];
-        $data['paginate_info']['prev_page_url'] =  !empty($data['paginate_info']['prev_page']) ? $base_url .'/'. $data['paginate_info']['prev_page'] : '';
-        $data['paginate_info']['next_page_url'] =  !empty($data['paginate_info']['next_page']) ? $base_url .'/'. $data['paginate_info']['next_page'] : '';
+        $current_page = $dbquery->paginateInfo['current_page'];
+
+        $dbquery->paginateInfo['base_page_url'] = $base_url .'/';
+        $dbquery->paginateInfo['first_page_url'] =  $base_url .'/1';
+        if ($current_page == 1) 
+            $dbquery->paginateInfo['first_page_url'] = 'javascript:void(0);';
+
+        $dbquery->paginateInfo['last_page_url'] =  $base_url .'/'. $dbquery->paginateInfo['last_page'];
+        if ($current_page == $dbquery->paginateInfo['last_page'])
+             $dbquery->paginateInfo['last_page_url'] = 'javascript:void(0);';
+
+        $dbquery->paginateInfo['prev_page_url'] =  !empty($dbquery->paginateInfo['prev_page']) ? $base_url .'/'. $dbquery->paginateInfo['prev_page'] : 'javascript:void(0);';
+        $dbquery->paginateInfo['next_page_url'] =  !empty($dbquery->paginateInfo['next_page']) ? $base_url .'/'. $dbquery->paginateInfo['next_page'] : 'javascript:void(0);';
+
+        $data['paginate_info'] = $dbquery->paginateInfo;
 
         return $data;
     }

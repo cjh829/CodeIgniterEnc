@@ -31,8 +31,11 @@ class Adminuser_Model extends CI_Model {
 
     public function getACLs($userid){
         $sql = "
-            SELECT *
+            SELECT *, ap.name AS parent_name
+            , CASE aa.is_menu WHEN 0 THEN aa.parent_id ELSE aa.id END AS menu_id
+            , CASE aa.is_menu WHEN 0 THEN ap.parent_id ELSE ap.id END AS menu_parent_id
             FROM adm_acl aa
+            LEFT JOIN adm_acl ap ON aa.parent_id = ap.id
             JOIN 
             (
             SELECT aga.group_id, aga.acl_id
@@ -51,16 +54,20 @@ class Adminuser_Model extends CI_Model {
                     ->result_array();
 
         $acls = array();
+         //transform to map(for determine current menu)
+        $ACLmenuMap = array();
         foreach($datas as $row) {
-            $acls[] = $row['controller'] .'|'. $row['method'];
+            $key = strtolower($row['controller'].'|'.$row['method']);
+            $acls[] = $key;
+            $ACLmenuMap[$key] = $row;
         }
-        return $acls;
+        return array('acls'=>$acls,'aclmenumap'=>$ACLmenuMap);
     }
 
     public function getMenus($userid) {
 
         $sql = "
-            SELECT aa.*, ap.name AS parent_name
+            SELECT aa.*
             , CASE aa.parent_id WHEN 0 THEN aa.sort ELSE CONCAT(ap.sort,',',aa.sort) END tree
             FROM adm_acl aa
             LEFT JOIN adm_acl ap ON aa.parent_id = ap.id
@@ -84,17 +91,14 @@ class Adminuser_Model extends CI_Model {
 
         //transform to tree(only two-level)
         $menutree = array();
-        //transform to map(for determine current menu)
-        $ACLmenuMap = array();
         foreach($datas as $row) {
             if ($row['parent_id'] == 0) {
                 $menutree[$row['id']] = array('me'=>$row, 'childs'=>array());
             } else {
                 $menutree[$row['parent_id']]['childs'][$row['id']] = array('me'=>$row);
-                $ACLmenuMap[strtolower($row['controller'].'|'.$row['method'])] = $row;
             }
         }
-        return array('tree'=>$menutree, 'ACLmap'=>$ACLmenuMap);
+        return $menutree;
     }
 
 }

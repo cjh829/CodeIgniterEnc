@@ -36,7 +36,7 @@
                   <th>status</th>
                   <th>OPERATION</th>
                 </tr>
-                @foreach($lists as $row)
+                @foreach($data as $row)
                 <tr>
                   <td>{{ $row['id'] }}</td>
                   <td>{{ $row['group_name'] }}</td>
@@ -48,15 +48,7 @@
             </div>
             <!-- /.box-body -->
             <div class="box-footer clearfix">
-              @if(!empty($paginate_info))
-              <ul class="pagination pagination-sm no-margin pull-right">
-                <li><a href="{{ $paginate_info['first_page_url']  }}">&laquo;</a></li>
-                @for ($i = 1; $i <= $paginate_info['last_page']; $i++)
-                <li><a href="{{ $paginate_info['base_page_url'] . $i }}">{{ $i }}</a></li>
-                @endfor
-                <li><a href="{{ $paginate_info['last_page_url']  }}">&raquo;</a></li>
-              </ul>
-              @endif
+              @include('admin._parts.pager')
             </div>
           </div>
           <!-- /.box -->

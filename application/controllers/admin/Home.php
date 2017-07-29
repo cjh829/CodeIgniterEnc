@@ -72,10 +72,10 @@ class Home extends MY_Controller {
 		}
 
 		$this->session->user = $userid;
-		$this->session->acls = $this->adminuser->getACLs($userid);
-		$menuData = $this->adminuser->getMenus($userid);
-		$this->session->menus = $menuData['tree'];
-		$this->session->aclmenumap = $menuData['ACLmap'];
+		$aclData = $this->adminuser->getACLs($userid);
+		$this->session->acls = $aclData['acls'];
+		$this->session->menus = $this->adminuser->getMenus($userid);
+		$this->session->aclmenumap = $aclData['aclmenumap'];
 		smart_redirect('index');
 	}
 
