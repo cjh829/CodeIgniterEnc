@@ -9,3 +9,4 @@ TODO List
 - user-group ACL ...done
 - pagination support ...done
 - strong-typed input mapping/validation
+- sql logs
