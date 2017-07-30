@@ -17,7 +17,10 @@
               <div class="box-body">
                 <div class="form-group">
                   <label for="input_id">id</label>
-                  <input type="text" class="form-control" name="id" id="input_id" placeholder="id">
+                  <input type="text" class="form-control" placeholder="id" value="{{ $vdata['id'] }}" {{ $is_edit ? 'disabled' : '' }}>
+                  @if($is_edit)
+                  <input type="hidden" name="id" id="input_id" value="{{ $vdata['id'] }}">  <!-- preserve id by hidden input -->
+                  @endif
                 </div>
                 <div class="form-group">
                   <label for="input_password">Password</label>
@@ -27,14 +30,13 @@
                   <label for="input_group">group</label>
                   <select class="form-control" name="group_id" id="input_group">
                     @foreach($groups as $row)
-                    <option value="{{$row['id']}}">{{ $row['name'] }}</option>
+                    <option value="{{$row['id']}}" {{ ($row['id'] == $vdata['group_id']) ? 'selected' : '' }}>{{ $row['name'] }}</option>
                     @endforeach
                   </select>
                 </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" name="is_enabled"> enabled
-                  </label>
+                <div class="form-group">
+                    <input type="checkbox" name="is_enabled" id="input_is_enabled" {{ ($is_edit && $vdata['is_enabled'] == 1) ? 'checked' : '' }}>
+                    <label for="input_is_enabled">enabled</label>
                 </div>
               </div>
               <!-- /.box-body -->

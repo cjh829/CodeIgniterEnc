@@ -24,6 +24,23 @@ class Adminuser_Model extends MY_Model {
         return $this->db->insert('adm_user',$data);
     }
 
+    public function edit($data) {
+        checkboxvalue_transform($data,'is_enabled');
+        if (empty($data['password'])){
+            unset($data['password']);
+        } else {
+            $data['password'] = password_hash($data['password'],PASSWORD_BCRYPT);
+        }
+        return $this->db->update('adm_user',$data,array('id'=>$data['id']));
+    }
+
+    public function get($id){
+        return $this->db
+                        ->where('id',$id)
+                        ->get('adm_user',1)
+                        ->result_array()[0];
+    }
+
 
     public function getPasswordHash($userid) {
         $r = $this->db->where('id',$userid)

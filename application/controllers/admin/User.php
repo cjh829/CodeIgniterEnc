@@ -23,5 +23,21 @@ class User extends MY_Controller {
     
         smart_redirect('lists');
     }
+
+    public function edit($id){
+        $this->load->model('adminuser');
+        $this->load->model('admingroup');
+        $data = array('groups'=> $this->admingroup->getlist());
+        $data['is_edit'] = TRUE;
+        $data['vdata'] = $this->adminuser->get($id);
+        return view('add',$data); //share view
+    }
     
+    public function edit_submit(){
+        $data = $this->input->post();
+        $this->load->model('adminuser');
+        $this->adminuser->edit($data);
+    
+        smart_redirect('lists');
+    }
 }

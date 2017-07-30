@@ -31,7 +31,7 @@
                   <td>{{ $row['id'] }}</td>
                   <td>{{ $row['group_name'] }}</td>
                   <td><span class="label {{ ($row['is_enabled'] == 1) ? 'label-success' : 'label-danger' }}">{{ ($row['is_enabled'] == 1) ? 'enabled' : 'disabled' }}</span></td>
-                  <td></td>
+                  <td class="col-xs-2"><input type="button" class="btn btn-block btn-default" value="edit" onclick="location.href='/admin/user/edit/{{ $row['id'] }}'"></td>
                 </tr>
                 @endforeach
               </table>
