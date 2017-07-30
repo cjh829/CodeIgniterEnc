@@ -69,3 +69,15 @@ if (!function_exists('get_paginate_data')) {
         return $data;
     }
 }
+
+if (!function_exists('checkboxvalue_transform')) {
+    function checkboxvalue_transform(&$array, $field_name, $on_value = 1, $off_value = 0){
+        if (array_key_exists($field_name,$array)) {
+            if ($array[$field_name] == 'on') {
+                $array[$field_name] = $on_value;
+            } else {
+                $array[$field_name] = $off_value;
+            }
+        }
+    }
+}

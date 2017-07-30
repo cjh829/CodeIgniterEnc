@@ -1,12 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Adminuser_Model extends CI_Model {
+class Adminuser_Model extends MY_Model {
 
     public function __construct()
     {
         parent::__construct();
-        $this->load->database();
     }
 
     public function getPagedData($page=1, $perpage = 20){
@@ -18,6 +17,13 @@ class Adminuser_Model extends CI_Model {
         $data = get_paginate_data($query);
         return $data;
     }
+
+    public function add($data){
+        checkboxvalue_transform($data,'is_enabled');
+        $data['password'] = password_hash($data['password'],PASSWORD_BCRYPT);
+        return $this->db->insert('adm_user',$data);
+    }
+
 
     public function getPasswordHash($userid) {
         $r = $this->db->where('id',$userid)
@@ -31,7 +37,7 @@ class Adminuser_Model extends CI_Model {
 
     public function getACLs($userid){
         $sql = "
-            SELECT *, ap.name AS parent_name
+            SELECT aa.*, ap.name AS parent_name
             , CASE aa.is_menu WHEN 0 THEN aa.parent_id ELSE aa.id END AS menu_id
             , CASE aa.is_menu WHEN 0 THEN ap.parent_id ELSE ap.id END AS menu_parent_id
             FROM adm_acl aa

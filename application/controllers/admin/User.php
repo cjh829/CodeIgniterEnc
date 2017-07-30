@@ -9,5 +9,19 @@ class User extends MY_Controller {
         $data = $this->adminuser->getPagedData($page,10);
         return view('',$data);
     }
+
+    public function add(){
+        $this->load->model('admingroup');
+        $data = array('groups'=> $this->admingroup->getlist());
+        return view('',$data);
+    }
+
+    public function add_submit(){
+        $data = $this->input->post();
+        $this->load->model('adminuser');
+        $this->adminuser->add($data);
+    
+        smart_redirect('lists');
+    }
     
 }

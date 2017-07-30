@@ -525,7 +525,23 @@
     </section>
     <!-- /.sidebar -->
   </aside>
-@yield('content')    
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        {{ $_current_menu['name'] }}
+        <small>preview of simple tables</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="javascript:void(0);"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="javascript:void(0);">{{ $_current_menu['parent_name'] }}</a></li>
+        <li class="active">{{ $_current_menu['name'] }}</li>
+      </ol>
+    </section>
+@yield('content')
+  </div>
+  <!-- /.content-wrapper -->
   <footer class="main-footer">
     <div class="pull-right hidden-xs">
       <b>Version</b> 2.4.0
