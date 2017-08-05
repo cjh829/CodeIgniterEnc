@@ -58,8 +58,7 @@ class Home extends MY_Controller {
 		$passwd = $this->input->post('password');
 		$captcha = $this->input->post('captcha');
 
-		$this->load->model('adminuser');
-		$hash = $this->adminuser->getPasswordHash($userid);
+		$hash = $this->m->adminuser->getPasswordHash($userid);
 		$ok = password_verify($passwd,$hash);
 		if (!$ok){
 			$this->session->set_flashdata('errormsg','incorrect user or password!');
@@ -84,8 +83,5 @@ class Home extends MY_Controller {
 			$this->session->sess_destroy();
 		}
 		smart_redirect('login');
-	}
-
-	public function test() {
 	}
 }

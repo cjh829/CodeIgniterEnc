@@ -29,10 +29,37 @@ if (!function_exists('get_paginate_data')) {
 
 if (!function_exists('checkboxvalue_transform')) {
     function checkboxvalue_transform(&$array, $field_name, $on_value = 1, $off_value = 0){
-        if ($array[$field_name] == 'on') {
-            $array[$field_name] = $on_value;
+        if (is_array($array[$field_name])) {
+            foreach($array[$field_name] as $key => $value) {
+                checkboxvalue_transform($array[$field_name], $key, $on_value, $off_value);
+            }
         } else {
-            $array[$field_name] = $off_value; //add an off-value for unchecked;
+            if ($array[$field_name] == 'on') {
+                $array[$field_name] = $on_value;
+            } else {
+                $array[$field_name] = $off_value; //add an off-value for unchecked;
+            }
         }
+    }
+}
+
+if (!function_exists('mapping_to_object')) {
+    function mapping_to_object($className, &$dataArray){
+        $obj = new $className;
+        $mapping = array();
+        if(in_array('_prop_class_map',get_class_methods($obj))) {
+            $mapping = $obj->_prop_class_map();
+        }
+        $properties = get_object_vars($obj);
+        foreach($dataArray as $name => $value) {
+            if (array_key_exists($name,$properties)) {
+                if (array_key_exists($name,$mapping)){
+                    $obj->$name = mapping_to_object($mapping[$name],$value);
+                } else {
+                    $obj->$name = $value;
+                }
+            }
+        }
+        return $obj;
     }
 }

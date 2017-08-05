@@ -17,7 +17,7 @@
               <div class="box-body">
                 <div class="form-group">
                   <label for="input_id">id</label>
-                  <input type="text" class="form-control" placeholder="id" value="{{ $vdata['id'] }}" {{ $is_edit ? 'disabled' : '' }}>
+                  <input type="text" name="id" class="form-control" placeholder="id" value="{{ $vdata['id'] }}" {{ $is_edit ? 'disabled' : '' }}>
                   @if($is_edit)
                   <input type="hidden" name="id" id="input_id" value="{{ $vdata['id'] }}">  <!-- preserve id by hidden input -->
                   @endif
