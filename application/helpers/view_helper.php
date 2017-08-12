@@ -6,6 +6,15 @@ use Philo\Blade\Blade;
 if (!function_exists('view')) {
     function view($name = NULL, $data = [], $mergeData = []) {
         $CI =& get_instance();
+        //errormsg
+        if (!array_key_exists('errormsg',$data)) {
+            $errormsg = $CI->session->flashdata('errormsg');
+            if (!empty($errormsg)) {
+                $data['errormsg'] = $errormsg ;
+            }
+        }
+
+        //menu
         if(isset($CI->session->user)) {
             $data['_menus'] = $CI->session->menus;
 

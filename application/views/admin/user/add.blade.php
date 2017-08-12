@@ -10,7 +10,9 @@
         <div class="col-md-12">
           <div class="box">
             <div class="box-header with-border">
-              <h3 class="box-title">&nbsp;</h3>
+              <h3 class="box-title text-danger">
+              @include('admin._parts.errormsg')
+              </h3>
             </div>
             <!-- /.box-header -->
             <form role="form" method="POST" action="{{ $is_edit ? '/admin/user/edit_submit' : '/admin/user/add_submit' }}">

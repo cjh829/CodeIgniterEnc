@@ -6,6 +6,5 @@ class MY_Model extends CI_Model {
     {
         parent::__construct();
         $this->load->database(); //default: load database
-        $this->load->library('model_adapter',null,'m');
     }
 }

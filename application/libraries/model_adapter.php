@@ -12,7 +12,7 @@ class model_adapter{
 
     //load model if not exists
     function __get($name) {
-        if (!property_exists($this->_CI,$name)){
+        if (!isset($this->_CI->$name)){
             $this->_CI->load->model($name);
         }
        

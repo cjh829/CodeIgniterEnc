@@ -10,5 +10,5 @@ TODO List
 - pagination support ...done
 - strong-typed input mapping  ...done
 - use $this->m->{modelname} to auto-load and access to model directly ...done;
+- sql logs ...done
 - form validation for frontend and backend
-- sql logs

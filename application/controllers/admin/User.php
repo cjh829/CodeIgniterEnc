@@ -13,12 +13,14 @@ class User extends MY_Controller {
 
     public function add(){
         $data = array('groups'=> $this->m->admingroup->getlist());
+
         return view('',$data);
     }
 
     public function add_submit(AddUserRequest $request){
-        $data = (array)$request;//$this->input->post();
-        $this->m->adminuser->add($data);
+        validate_request($request,'add');
+
+        $this->m->adminuser->add($request->toArray());
     
         smart_redirect('lists');
     }

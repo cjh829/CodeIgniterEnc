@@ -63,3 +63,28 @@ if (!function_exists('mapping_to_object')) {
         return $obj;
     }
 }
+
+//ref: https://stackoverflow.com/questions/28573889/illuminate-validator-in-stand-alone-non-laravel-application
+if (!function_exists('validator')) {
+    function validator($data = array(), $rules=array(), $messages=array()){
+        $CI =& get_instance();
+        if (!isset($CI->validatorFactory)) {
+            $filesystem = new Illuminate\Filesystem\Filesystem();
+            $fileLoader = new Illuminate\Translation\FileLoader($filesystem, '');
+            $translator = new Illuminate\Translation\Translator($fileLoader, 'en_US');
+            $CI->validatorFactory = new Illuminate\Validation\Factory($translator);
+        }
+
+        return $CI->validatorFactory->make($data, $rules, $messages);
+    }
+}
+
+if (!function_exists('validate_request')) {
+    function validate_request(CJH\Request\RequestBase $request, $redirect_path){
+        if (!$request->isValid()){
+            $CI =& get_instance();
+            $CI->session->set_flashdata('errormsg',$request->validateFailMessages());
+            smart_redirect($redirect_path);
+        }
+    }
+}

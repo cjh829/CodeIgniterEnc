@@ -1,7 +1,41 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+use Monolog\Logger;
+use Monolog\Handler\RotatingFileHandler;
+use Monolog\Formatter\LineFormatter;
+
 class MY_DB_query_builder extends CI_DB_query_builder {
+
+	protected $_logger;
+
+	/**
+	 * Class constructor
+	 *
+	 * @param	array	$params
+	 * @return	void
+	 */
+	public function __construct($params)
+	{
+		parent::__construct($params);
+		
+		$folderPath = APPPATH . 'logs/sql';
+		if (!file_exists($folderPath)){
+			if (!mkdir($folderPath,0666,TRUE)){
+				throw new Exception('create log folder fail:'.$folderPath);
+			}
+		}
+
+		$handler = new RotatingFileHandler($folderPath. '/sql',7,Logger::DEBUG,TRUE,0666);
+
+		$output = "[%datetime%][%level_name%]%message% %context% %extra%\n";
+		$formatter = new LineFormatter($output,NULL,FALSE,TRUE);
+		$handler->setFormatter($formatter);
+		
+
+		$this->_logger = new Logger(__CLASS__);
+		$this->_logger->pushHandler($handler);
+	}
 
     /**
 	 * Insert_Ignore_Batch
@@ -152,6 +186,11 @@ class MY_DB_query_builder extends CI_DB_query_builder {
         $total = $this->count_all_results($table, FALSE);
 
         $lastPage = intval(ceil($total/$perpage));
+		if($lastPage <=0) 
+			$lastPage = 1;
+
+		if($page > $lastPage)
+			$page = $lastPage;
 
         $prevPage = $page-1;
         if ($prevPage <1)
@@ -238,7 +277,8 @@ class MY_DB_query_builder extends CI_DB_query_builder {
 		if ($this->save_queries === TRUE)
 		{
 			$this->queries[] = $sql;
-			// TODO: log sql
+
+			$this->_logger->info(trim($sql));
 		}
 
 		// Start the Query Timer

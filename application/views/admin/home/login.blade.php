@@ -10,7 +10,7 @@
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
-    <p class="login-box-msg text-danger">{{ $errormsg }}</p>
+    <p class="login-box-msg text-danger">@include('admin._parts.errormsg')</p>
 
     <form action="{{ '//' . SITE_URL }}/admin/home/login_submit" method="post">
       <div class="form-group has-feedback">
